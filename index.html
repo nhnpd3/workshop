@@ -688,7 +688,7 @@ em { font-style: normal; color: #ff0000; }
           ${b.list.map((r) => `<div class="col"><div class="head">${r.late ? "🍺 " : ""}${esc(r.floor)}</div>
             <div class="names">${r.people.map((p, i) => nm(p, i === 0)).join("")}</div></div>`).join("")}
         </div></div>`).join("")}</div>
-      </div></div>` : locked("숙소 배정"), W.edition === "1015" ? place("숙소 보기", "", false, "#venue") : "");
+      </div></div>` : locked("숙소 배정"), W.edition === "1015" ? place("숙소동 보기", "", false, "#venue") : "");
 
   const T = W.teams;
   const teams = section("teams", "팀 배정", isFinal ? `<div style="display:flex;flex-direction:column;gap:13px">
