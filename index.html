@@ -58,7 +58,7 @@ const WORKSHOP = {
   // link: 장소에 밑줄+링크 (네이버 지도 주소, 또는 "#venue" = 위 숙소 배치도로 이동). placeRest: 장소 뒤에 이어지는 글
   schedule: [
     { day: "1일차", date: "29일(목)", rows: [
-      { time: "각 출발시간 상이", text: "12시 이후 식권보내기( 담당자 )" },
+      { time: "각 출발시간 상이", text: "12시 이후 식권보내기(김종리 팀장님)" },
       { time: "1:00 - 2:00", place: "회령손만두국", link: "https://naver.me/Fw7iqaap", placeRest: "(식당 → 숙소까지 15분 소요)" },
       { time: "2:30 - 3:00", place: "더포레스트 양평", link: "https://naver.me/GwffeX8C", placeRest: " 도착 및 세미나실에서 휴식(숙소 입실이 3시부터 가능)" },
       { time: "3:00 - 6:00", text: "명랑 운동회 및 단체 사진 촬영", place: "세미나실", link: "#venue" },
@@ -73,7 +73,7 @@ const WORKSHOP = {
 
   /* ---------- 워크샵 사전 안내 ---------- */
   carsHeader: "15대 이동 + 개인차량 별도",
-  carsInfo: "- 돌아오는 차량이 다른 분들(이름 옆에 ▲)은 출발 차주에게 반드시 전달해주세요.",
+  carsChecks: ["돌아오는 차량이 다른 분들(이름 옆에 ▲)은 출발 차주에게 반드시 전달해주세요."],   // ✓ 표시 줄 (500)
   carAreas: [   // 차량 묶음 순서. panel: 같은 번호끼리 한 상자, row: 같은 번호면 나란히
     { name: "서울권", panel: 1, row: 1 },
     { name: "경기권", panel: 1, row: 2 },
@@ -310,13 +310,13 @@ b { font-weight: 700; }
 .content { max-width: 980px; margin: 0 auto; }   /* 우측 콘텐츠 가운데 정렬 */
 .banner { display: block; width: 100%; height: auto; aspect-ratio: 2940 / 534; background: var(--taupe); margin-bottom: 65px; }
 .sec:first-child .sec-title { padding-top: 0; }   /* 배너 ↔ 첫 제목 65px */
-.sections { display: flex; flex-direction: column; gap: 80px; }
+.sections { display: flex; flex-direction: column; gap: 120px; }   /* 섹션 사이 120 (제목 위 여백 없이) */
 .sec { scroll-margin-top: 24px; }
-.sec-title { margin: 0; padding-top: 40px; font-size: 22px; line-height: normal; font-weight: 700; color: #000; }
+.sec-title { margin: 0; padding-top: 0; font-size: 22px; line-height: normal; font-weight: 700; color: #000; }
 .sec.flush .sec-title { padding-top: 0; }
 .page-title { display: none; margin: 0; padding-bottom: 60px; font-size: 28px; line-height: normal; font-weight: 700; color: #000; }
 .ed-1015 .page-title { display: block; }   /* 10/15 1차 공지: 배너 대신 제목 */
-.last-year { display: none; margin-bottom: 80px; flex-direction: column; gap: 30px; }   /* 제목 ↓60 작년에 우리는 ↓30 영상 ↓80 장소 안내 */
+.last-year { display: none; margin-bottom: 120px; flex-direction: column; gap: 30px; }   /* 제목 ↓60 작년에 우리는 ↓30 영상 ↓120 장소 안내 */
 .ed-1015 .last-year { display: flex; }
 .last-year h2 { margin: 0; font-size: 22px; line-height: normal; font-weight: 700; color: #000; }
 .last-year .video { aspect-ratio: 16 / 9; background: #000; overflow: hidden; }   /* 영상 비율 그대로 (잘림 없음) */
@@ -662,8 +662,8 @@ em { font-style: normal; color: #ff0000; }
           </div></div>`).join("")}
       </div></div>`).join("")}</div>`);
 
-  const cars = section("cars", "차량 배차", isFinal ? `<div style="display:flex;flex-direction:column;gap:13px">
-      <div><div class="bar">${esc(W.carsHeader)}</div><div class="info thin nb" style="font-size:15px;line-height:30px">${rich(W.carsInfo)}</div></div>
+  const cars = section("cars", "차량 배차", isFinal ? `<div style="display:flex;flex-direction:column;gap:12px">
+      <div><div class="bar">${esc(W.carsHeader)}</div><div class="info plain" style="padding:30px 0 30px 8px;font-size:15px;line-height:30px"><div class="checks" style="margin:0;gap:0">${W.carsChecks.map((c) => `<div>${CHECK}<span>${rich(c)}</span></div>`).join("")}</div></div></div>
       ${[...new Set(W.carAreas.map((a) => a.panel ?? a.row))].map((pn) => `<div class="panel">${[...new Set(W.carAreas.filter((a) => (a.panel ?? a.row) === pn).map((a) => a.row))].map((row) => `<div class="panel-row">
         ${W.carAreas.filter((a) => a.row === row).map((a) => `<div class="group"><div class="group-name">${esc(a.name)}</div><div class="cols">
           ${W.cars.filter((c) => c.area === a.name).map((c) => `<div class="col"><div class="head">${esc(c.from)}</div>
@@ -678,7 +678,7 @@ em { font-style: normal; color: #ff0000; }
 
   const L = W.lunch;
   const lunch = section("lunch", "점심식사", `
-      <div><div class="bar">${esc(L.menuHeader)}</div><div class="info plain nb" style="padding:30px 0 30px 8px;font-size:15px;line-height:30px"><div class="checks" style="margin:0;gap:0">${L.menuChecks.map((c) => `<div>${CHECK}<span>${rich(c)}</span></div>`).join("")}</div></div>
+      <div><div class="bar">${esc(L.menuHeader)}</div><div class="info plain" style="margin-bottom:12px;padding:30px 0 30px 8px;font-size:15px;line-height:30px"><div class="checks" style="margin:0;gap:0">${L.menuChecks.map((c) => `<div>${CHECK}<span>${rich(c)}</span></div>`).join("")}</div></div>
         <div class="menus"><div class="row">${L.menus.map((m) => `<div class="dish"><span class="lbl">${rich(m.label)}</span>${slot(m.image, m.label.replace(/<\/?b>/g, ""))}</div>`).join("")}</div>
           ${L.side ? `<div class="dish"><span class="lbl">${rich(L.side.label)}</span><div class="side-pair">${(L.side.images || [L.side.image]).map((src, i) => slot(src, `녹두빈대떡 ${i + 1}`)).join("")}</div></div>` : ""}</div></div>
       ${L.showWay ? `<div><div class="bar">${esc(L.wayHeader)}</div><div class="info sm thin nb">${esc(L.wayInfo)}</div>
