@@ -710,9 +710,9 @@ em { font-style: normal; color: #ff0000; }
   const MENU = [
     { group: "", items: [{ id: "overview", title: "장소 안내 & 일정" }] },
     { group: "워크샵 사전 안내", items: [   // dot: true = 새 소식 노란 점
-      { id: "kakao", title: "카카오톡 오픈 채팅", dot: true },
-      { id: "buzzer", title: "온라인 부저", dot: true },
-      { id: "cars", title: "차량 배차", count: () => W.carCount || `${W.cars.length}대` },
+      { id: "kakao", title: "카카오톡 오픈 채팅" },
+      { id: "buzzer", title: "온라인 부저" },
+      { id: "cars", title: "차량 배차", dot: true, count: () => W.carCount || `${W.cars.length}대` },
     ]},
     { group: "상세 안내", items: [
       { id: "lunch", title: "점심 식사" },
@@ -722,10 +722,10 @@ em { font-style: normal; color: #ff0000; }
     ]},
     { group: "게임", items: [
       { id: "teams", title: "게임팀 배정", dot: true, count: () => `${W.teams.list.length}팀` },
-      { id: "games", title: "게임 안내", dot: true, count: () => W.gameDuration || "" },
+      { id: "games", title: "게임 안내", count: () => W.gameDuration || "" },
     ]},
     { group: "워크샵을 마치고", items: [
-      { id: "fuel", title: "유류비 신청하기", dot: true },
+      { id: "fuel", title: "유류비 신청하기" },
     ]},
   ];
 
