@@ -717,7 +717,7 @@ em { font-style: normal; color: #ff0000; }
       { id: "lunch", title: "점심 식사" },
       { id: "dinner", title: "저녁 식사" },
       { id: "breakfast", title: "조식" },
-      { id: "rooms", title: "숙소 배정", count: () => `${W.rooms.reduce((n, b) => n + b.list.length, 0)}실` },
+      { id: "rooms", title: "숙소 배정", dot: true, count: () => `${W.rooms.reduce((n, b) => n + b.list.length, 0)}실` },
     ]},
     { group: "게임", items: [
       { id: "teams", title: "게임팀 배정", dot: true, count: () => `${W.teams.list.length}팀` },
