@@ -138,10 +138,16 @@ const WORKSHOP = {
   },
   breakfast: {
     name: "바베큐장 앞 실내식당", link: "#venue",
-    header: "3개 메뉴 택 1",
-    checks: [   // ✓ 표시 줄 (300), <b>는 500
-      "<b>8:30- 9:30</b>까지 식사 시간입니다.",
-      "<b>양평해장국, 설렁탕, 한강 라면 택 1</b> 하면 되며, 투숙 인원만큼 결제에 모두 포함되어 있습니다. <b>꼭 드셔주세요.</b>🥹🙏",
+    header: "퇴실 시간 11시",
+    groups: [   // 굵은 소제목 + ✓ 표시 줄 (300), <b>는 500
+      { label: "조식", checks: [
+        "<b>8:30- 9:30</b>까지 식사 시간입니다.",
+        "<b>양평해장국, 설렁탕, 한강 라면 택 1</b> 하면 되며, 숙박 인원만큼 결제에 모두 포함되어 있습니다. <b>꼭 드셔주세요.</b>🥹🙏",
+      ]},
+      { label: "해산", checks: [
+        "식사를 마치시면 각자 짐 챙겨 출발하면 됩니다.",
+        "<b>방장은 이영선 팀장님</b>께 연락하여 반드시 키를 반납해 주세요.",
+      ]},
     ],
   },
   roomsChecks: [   // ✓ 표시와 함께 나오는 줄(300). <b>는 500 (피그마 순서)
@@ -151,7 +157,8 @@ const WORKSHOP = {
     "어매니티 : 샴푸, 컨디셔너, 바디워시, 비누, 타올(인원수만큼 1장씩), 드라이기",
     "개인적으로 필요한 물품(세면도구, 약 등)은 개별 준비해주세요.",
   ],
-  roomsNote: "각 룸 입구에 이름표 부착되어 있어요",
+  roomsNote: "방 키에 맞는 호실로 찾아가세요.(각 룸 입구에 이름표 부착)",
+  showFloor: false,   // 숙소 명단 위 층(1층·🍺 2층) 표시. 시안에서 뺌
 
   /* ---------- 프로그램 ---------- */
   teamsPlace: "다리 건너 세미나실", teamsLink: "#venue",
@@ -456,6 +463,7 @@ mark { color: inherit; background: linear-gradient(transparent 55%, #fff27a 55%)
 .bldg .col { gap: 18px; }   /* 층 ↔ 이름 18 */
 .bldg .col .head { font-size: 16px; line-height: 24px; width: 72px; margin: 0; padding: 11px 0; border-top: 1px solid #000; border-bottom: 1px solid #000; }   /* 층 위아래 선 */
 .bldg .col .names { padding-top: 0; border-top: 0; gap: 12.5px; }
+.bldg .col .names:first-child { padding-top: 18px; border-top: 1px solid #000; }   /* 층 표시 없을 때: 이름 위 검정 선 (차량 배차와 같음) */
 .bldg .nm { font-size: 15px; line-height: 22.5px; }   /* 숙소 이름 15px (줄 간격 35) */
 .bldg .col .head { font-weight: 500; }
 .bldg .nm, .team .nm { font-weight: 300; }            /* 숙소·팀 이름: 가늘게 */
@@ -524,6 +532,7 @@ a.exp-doc:hover { opacity: .7; }
 #toast { position: fixed; left: 50%; bottom: 32px; transform: translate(-50%, 20px); max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 10px; background: #191919; color: #fff; font-size: 14px; line-height: 1.4; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 50; }
 #toast.on { opacity: 1; transform: translate(-50%, 0); }
 
+.bf-label { font-weight: 700; padding-bottom: 2px; }   /* 조식·해산 소제목 */
 .team-qr { display: flex; flex-direction: column; align-items: center; gap: 30px; }
 .yellow.kakao p { line-height: 180% !important; }   /* 행간 180% */
 .yellow.kakao p:not(.kakao-teams) { font-weight: 300; }
@@ -716,7 +725,7 @@ em { font-style: normal; color: #ff0000; }
     { group: "상세 안내", items: [
       { id: "lunch", title: "점심 식사" },
       { id: "dinner", title: "저녁 식사" },
-      { id: "breakfast", title: "조식" },
+      { id: "breakfast", title: "조식 및 해산", dot: true },
       { id: "rooms", title: "숙소 배정", dot: true, count: () => `${W.rooms.reduce((n, b) => n + b.list.length, 0)}실` },
     ]},
     { group: "게임", items: [
@@ -797,7 +806,7 @@ em { font-style: normal; color: #ff0000; }
   const D = W.dinner, B = W.breakfast;
   const dinner = section("dinner", "저녁 식사", `<div><div class="bar">${esc(D.header)}</div><div class="info plain lead thin">${(D.checks || []).length ? `<div class="checks">${D.checks.map((c) => `<div>${CHECK}<span>${rich(c)}</span></div>`).join("")}</div>` : ""}${rich(D.info)}</div>
       ${(D.photos || []).length ? `<div class="photos2"><div>${D.photos.map((p, i) => slot(p, `바베큐장 사진 ${i + 1}`)).join("")}</div></div>` : ""}</div>`, place(D.name, "", false, D.link));
-  const breakfast = section("breakfast", "조식", `<div><div class="bar">${esc(B.header)}</div><div class="info plain" style="padding:30px 0 30px 8px;font-size:15px;line-height:30px"><div class="checks thin" style="margin:0;gap:0">${B.checks.map((c) => `<div>${CHECK}<span>${rich(c)}</span></div>`).join("")}</div></div></div>`, place(B.name, "", false, B.link));
+  const breakfast = section("breakfast", "조식 및 해산", `<div><div class="bar">${esc(B.header)}</div><div class="info plain" style="padding:30px 0 30px 8px;font-size:15px;line-height:30px">${B.groups.map((g, gi) => `<div class="bf-label"${gi ? ' style="padding-top:20px"' : ""}>${esc(g.label)}</div><div class="checks thin" style="margin:0;gap:0">${g.checks.map((c) => `<div>${CHECK}<span>${rich(c)}</span></div>`).join("")}</div>`).join("")}</div></div>`, place(B.name, "", false, B.link));
 
   const roomCount = (g) => W.rooms.filter((b) => b.gender === g).reduce((n, b) => n + b.list.length, 0);
   const roomsHeader = W.rooms.map((b) => `${b.title.split("-")[0].trim()} - ${(b.title.match(/([A-Z가-힣]동)/) || [""])[0]} ${b.list.length}룸`).join(" / ");
@@ -805,7 +814,7 @@ em { font-style: normal; color: #ff0000; }
       <div><div class="bar">${esc(roomsHeader)}</div><div class="info plain lead"><div class="checks thin" style="margin:0">${W.roomsChecks.map((c) => `<div>${CHECK}<span>${rich(c)}</span></div>`).join("")}</div></div></div>
       <div class="panel" style="gap:38px"><div class="rooms-note">${esc(W.roomsNote)}</div>
         <div class="bldgs">${W.rooms.map((b) => `<div class="bldg"><h4>${esc(b.title)}</h4><div class="cols">
-          ${b.list.map((r) => `<div class="col"><div class="head">${r.late ? "🍺 " : ""}${esc(r.floor)}</div>
+          ${b.list.map((r) => `<div class="col">${W.showFloor === false ? "" : `<div class="head">${r.late ? "🍺 " : ""}${esc(r.floor)}</div>`}
             <div class="names">${r.people.map((p, i) => nm(p, i === 0)).join("")}</div></div>`).join("")}
         </div></div>`).join("")}</div>
       </div></div>` : locked("숙소 배정"), W.edition === "1015" ? place("숙소 보기", "", false, "#venue") : "");
